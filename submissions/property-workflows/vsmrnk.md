@@ -29,17 +29,17 @@
 
 ## Бонус E
 
-`/opsx:verify` для `impl-run-launch` (кроки `.claude/commands/opsx/verify.md`, артефакти з архіву зміни) + власний розбір.
+`/opsx:verify` для `impl-run-launch` (кроки `.claude/commands/opsx/verify.md`, артефакти з архіву зміни https://github.com/vsmrnk/property-workflows/tree/4cc3db341c60416865a6e0b875453489379a1d0a/openspec/changes/archive/2026-10-20-impl-run-launch) + власний розбір.
 
 Результат verify: CRITICAL — 0; 9/9 задач виконано, 18/18 AC (на той момент) мали код і тест; 5 WARNING, 6 SUGGESTION. Головне: 6 AC (AC-RUN-03, AC-RUN-07, AC-TASK-03, AC-TASK-05, AC-TASK-08, AC-TASK-09) перевірено лише частково — їхній THEN про те, що користувач *бачить*, а тести покривали чисту функцію й БД окремо, без server action.
 
 Що зробив:
 
-- #1, #4 — виправив: `tests/runs/actions.test.ts` тестує `launchRun` і `markTaskDone` з мок-клієнтом — тексти PM дослівно, а на некоректних даних запит до бази не йде (PR #12).
-- #9 (секції групувались за назвою) — виправив: групування за позицією секції (`groupBySection`, PR #9, тест AC-TASK-12 у PR #12).
-- #11 (рішення Q2/Q3/Q4 без підтвердження PM) — закрилось відповідями PM 20.10: специфікація `clarify-run-launch` (PR #11), Q3 перероблено на лише email.
+- #1, #4 — виправив: https://github.com/vsmrnk/property-workflows/blob/4cc3db341c60416865a6e0b875453489379a1d0a/tests/runs/actions.test.ts тестує `launchRun` і `markTaskDone` з мок-клієнтом — тексти PM дослівно, а на некоректних даних запит до бази не йде (https://github.com/vsmrnk/property-workflows/pull/12).
+- #9 (секції групувались за назвою) — виправив: групування за позицією секції (https://github.com/vsmrnk/property-workflows/blob/4cc3db341c60416865a6e0b875453489379a1d0a/src/lib/runs/progress.ts (`groupBySection`); https://github.com/vsmrnk/property-workflows/pull/9; тест AC-TASK-12 — https://github.com/vsmrnk/property-workflows/blob/4cc3db341c60416865a6e0b875453489379a1d0a/tests/runs/clarify.test.tsx).
+- #11 (рішення Q2/Q3/Q4 без підтвердження PM) — закрилось відповідями PM 20.10: специфікація `clarify-run-launch` (https://github.com/vsmrnk/property-workflows/pull/11), Q3 перероблено на лише email (https://github.com/vsmrnk/property-workflows/blob/4cc3db341c60416865a6e0b875453489379a1d0a/supabase/migrations/20261020120000_assignable_users_email_only.sql).
 - #2, #3 — свідомо лишив: «2 of 5 done» і мітки статусів перевіряють `progressOf`/`requirementLabel` + DB-тести під RLS; повний зв'язок «сторінка → текст» закриють e2e-тести наступних занять.
-- #5 (шаблони даними міграції, а не `seed.sql`) — лишив з поясненням у міграції `20261020100000_initial_templates.sql`: `db push --include-seed` не виконує `seed.sql` повторно.
+- #5 (шаблони даними міграції, а не `seed.sql`) — лишив з поясненням у міграції https://github.com/vsmrnk/property-workflows/blob/4cc3db341c60416865a6e0b875453489379a1d0a/supabase/migrations/20261020100000_initial_templates.sql — `db push --include-seed` не виконує `seed.sql` повторно.
 - #6–#8 — косметика документації, без змін поведінки.
 
 Висновок: verify знайшов не дефекти, а прогалини в доказах «що бачить користувач»; найцінніше — тести server actions і правильне групування секцій.
